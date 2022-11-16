@@ -1,0 +1,12 @@
+#!/usr/bin/awk -f
+{sitelist[NR-1] = $0;}
+END {
+    sitelist[-1] = sitelist[NR-1]
+    sitelist[NR] = sitelist[0]
+    for(i = 0; i < NR; i++) {
+        system("mkdir -p './next/" sitelist[i] "'");
+	system("mkdir -p './prev/" sitelist[i] "'");
+	print "<!doctype html><html><head><meta http-equiv=\"Refresh\" content=\"0; url='http://" sitelist[i-1]"'\"/></head></html>" > ("./prev/" sitelist[i] "/index.html")
+	print "<!doctype html><html><head><meta http-equiv=\"Refresh\" content=\"0; url='http://" sitelist[i+1]"'\"/></head></html>" > ("./next/" sitelist[i] "/index.html")
+    }
+}
